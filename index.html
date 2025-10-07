@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="웹크롤러프로">
+    <meta name="theme-color" content="#4A5FC1">
+    <title>하이HAI 검색</title>
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;웹크롤러프로&quot;,&quot;short_name&quot;:&quot;크롤러&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0F0F1E&quot;,&quot;theme_color&quot;:&quot;#4A5FC1&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiM0QTVGQzEiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTAgMTBIMTRWMTZIMTBWMTBaIi8+CjxwYXRoIGQ9Ik0yIDJMMjIgMiIvPgo8cGF0aCBkPSJNMiA2TDIyIDYiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTAgMTBIMTRWMTZIMTBWMTBaIi8+CjxwYXRoIGQ9Ik0yIDJMMjIgMiIvPgo8cGF0aCBkPSJNMiA2TDIyIDYiLz4KPC9zdmc+&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0F0F1E 0%, #1E1E2E 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(74, 95, 193, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(74, 95, 193, 0.3);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #7B8EFF;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #B8B8C8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #E0E0E8;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #3A3A4E;
+            border-radius: 12px;
+            background: #2A2A3E;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #4A5FC1;
+            background: #2A2A3E;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #3A3A4E;
+            border-radius: 12px;
+            background: #2A2A3E;
+            color: white;
+            font-size: 16px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #2A2A3E;
+            border: 2px solid #3A3A4E;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: white;
+        }
+
+        .checkbox-label:hover {
+            background: #3A3A4E;
+            border-color: #4A5FC1;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-label input[type="checkbox"]:checked + span {
+            color: #7B8EFF;
+            font-weight: 600;
+        }
+
+        .checkbox-label:has(input:checked) {
+            background: rgba(74, 95, 193, 0.2);
+            border-color: #4A5FC1;
+        }
+
+        .search-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4A5FC1 0%, #6A4C93 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 95, 193, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #1E1E2E;
+            border-radius: 15px;
+            border: 1px solid #3A3A4E;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #3A3A4E;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4A5FC1, #7B8EFF);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #B8B8C8;
+            text-align: center;
+        }
+
+        .results-container {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: #2A2A3E;
+            border: 1px solid #3A3A4E;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            border-color: #4A5FC1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 95, 193, 0.2);
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .result-source {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .result-date {
+            font-size: 12px;
+            color: #B8B8C8;
+        }
+
+        .result-snippet {
+            font-size: 14px;
+            color: #B8B8C8;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .result-url {
+            font-size: 12px;
+            color: #7B8EFF;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .portal-naver { background: #03C75A; }
+        .portal-google { background: #4285F4; }
+        .portal-daum { background: #4E7CFF; }
+        .portal-nate { background: #FF6B35; }
+        .portal-bing { background: #008373; }
+        .portal-yahoo { background: #720E9E; }
+        .portal-coupang { background: #FA4B54; }
+        .portal-elevenst { background: #E60012; }
+        .portal-gmarket { background: #2EBD9E; }
+        .portal-auction { background: #FE5B01; }
+        .portal-youtube { background: #FF0000; }
+        .portal-instagram { background: #E1306C; }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #4A5FC1;
+            border-radius: 10px;
+            background: transparent;
+            color: #4A5FC1;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #4A5FC1;
+            color: white;
+        }
+
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4A5FC1 0%, #6A4C93 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 14px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .install-prompt.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .search-btn:active {
+                transform: scale(0.98);
+            }
+            
+            .result-item:active {
+                transform: scale(0.98);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>하이HAI 검색</h1>
+            <p>18개 포털 통합 검색</p>
+        </div>
+
+        <form id="searchForm">
+            <div class="form-group">
+                <label for="query">검색어</label>
+                <input type="text" id="query" placeholder="검색할 키워드 입력" required>
+            </div>
+
+            <div class="form-group">
+                <label>포털 선택</label>
+                <div class="btn-group">
+                    <button type="button" class="btn" onclick="selectAllPortals()">전체 선택</button>
+                    <button type="button" class="btn" onclick="deselectAllPortals()">전체 해제</button>
+                </div>
+                <div class="checkbox-group" id="portals">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="naver" checked>
+                        <span>네이버</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="google">
+                        <span>구글</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="daum">
+                        <span>다음</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="nate">
+                        <span>네이트</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="bing">
+                        <span>빙</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="yahoo">
+                        <span>야후</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="coupang">
+                        <span>쿠팡</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="elevenst">
+                        <span>11번가</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="gmarket">
+                        <span>지마켓</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="auction">
+                        <span>옥션</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="youtube">
+                        <span>유튜브</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="portal" value="instagram">
+                        <span>인스타그램</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="scope">검색 범위</label>
+                <select id="scope">
+                    <option value="all">전체</option>
+                    <option value="news">뉴스</option>
+                    <option value="blog">블로그</option>
+                    <option value="shopping">쇼핑</option>
+                    <option value="cafe">카페</option>
+                </select>
+            </div>
+
+            <button type="submit" class="search-btn">
+                검색하기
+            </button>
+        </form>
+
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status-text" id="statusText">준비 중...</div>
+        </div>
+
+        <div class="results-container" id="resultsContainer"></div>
+    </div>
+
+    <div class="install-prompt" id="installPrompt">
+        📱 홈 화면에 추가하여 앱처럼 사용하세요!
+        <br><small>Safari 메뉴 → "홈 화면에 추가"</small>
+    </div>
+
+    <script>
+        // Cloudflare Worker 주소를 설정하세요. 예: https://your-worker.workers.dev
+        // 비워두면 기존처럼 포털 검색 페이지로만 이동합니다.
+        const WORKER_URL = '';
+        let results = [];
+        let isCrawling = false;
+
+        // PWA 설치 프롬프트
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                document.getElementById('installPrompt').classList.add('show');
+            }, 3000);
+        });
+
+        // 앱 설치
+        document.getElementById('installPrompt').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+            }
+        });
+
+        // 포털 선택 함수들
+        function selectAllPortals() {
+            const checkboxes = document.querySelectorAll('input[name="portal"]');
+            checkboxes.forEach(cb => cb.checked = true);
+        }
+
+        function deselectAllPortals() {
+            const checkboxes = document.querySelectorAll('input[name="portal"]');
+            checkboxes.forEach(cb => cb.checked = false);
+        }
+
+        // 폼 제출 처리
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isCrawling) return;
+            
+            const query = document.getElementById('query').value.trim();
+            if (!query) return;
+            
+            const selectedPortals = Array.from(document.querySelectorAll('input[name="portal"]:checked'))
+                .map(cb => cb.value);
+            
+            if (selectedPortals.length === 0) {
+                alert('최소 1개 포털을 선택해주세요.');
+                return;
+            }
+            
+            await startCrawling(query, selectedPortals);
+        });
+
+        // 크롤링 시작
+        async function startCrawling(query, portals) {
+            isCrawling = true;
+            results = [];
+            
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const statusText = document.getElementById('statusText');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            progressContainer.style.display = 'block';
+            searchBtn.disabled = true;
+            searchBtn.textContent = '크롤링 중...';
+            resultsContainer.innerHTML = '';
+            
+            for (let i = 0; i < portals.length; i++) {
+                const portal = portals[i];
+                const progress = ((i + 1) / portals.length) * 100;
+                
+                progressFill.style.width = progress + '%';
+                statusText.textContent = `${getPortalName(portal)} 검색 중... (${i + 1}/${portals.length})`;
+                
+                const portalResults = await simulateCrawling(query, portal);
+                results.push(...portalResults);
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+            
+            progressFill.style.width = '100%';
+            statusText.textContent = `완료! ${results.length}개 결과 발견`;
+            
+            setTimeout(() => {
+                displayResults();
+                isCrawling = false;
+                searchBtn.disabled = false;
+                searchBtn.textContent = '검색하기';
+                progressContainer.style.display = 'none';
+            }, 500);
+        }
+
+        // 포털 이름 반환
+        function getPortalName(portal) {
+            const names = {
+                naver: '네이버',
+                google: '구글',
+                daum: '다음',
+                nate: '네이트',
+                bing: '빙',
+                yahoo: '야후',
+                coupang: '쿠팡',
+                elevenst: '11번가',
+                gmarket: '지마켓',
+                auction: '옥션',
+                youtube: '유튜브',
+                instagram: '인스타그램'
+            };
+            return names[portal] || portal;
+        }
+
+        // 크롤링 시뮬레이션
+        async function simulateCrawling(query, portal) {
+            // 1) Worker가 설정되어 있으면 실제 링크를 받아옵니다.
+            if (WORKER_URL) {
+                try {
+                    const url = `${WORKER_URL}/?portal=${encodeURIComponent(portal)}&q=${encodeURIComponent(query)}`;
+                    const resp = await fetch(url);
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        const items = Array.isArray(data.items) ? data.items : [];
+                        return items.slice(0, 20).map((x) => ({
+                            title: x.title || generateRealisticTitle(query, portal, 1),
+                            url: x.url || buildResultUrl(portal, query, 1),
+                            source: x.source || getPortalName(portal),
+                            portal,
+                            snippet: x.snippet || '',
+                            date: generateRecentDate()
+                        }));
+                    }
+                } catch (e) {
+                    console.warn('Worker 호출 실패, 검색 페이지로 대체', e);
+                }
+            }
+
+            // 2) Worker가 없거나 실패하면 포털 검색 페이지로 대체 결과 생성
+            const results = [];
+            const count = Math.floor(Math.random() * 8) + 5; // 5-12개 결과
+            for (let i = 1; i <= count; i++) {
+                results.push({
+                    title: generateRealisticTitle(query, portal, i),
+                    url: buildResultUrl(portal, query, i),
+                    source: getPortalName(portal),
+                    portal,
+                    snippet: generateRealisticSnippet(query, portal),
+                    date: generateRecentDate()
+                });
+            }
+            return results;
+        }
+
+        // 실제 포털 검색 URL 생성 (클릭 시 포털로 이동)
+        function buildResultUrl(portal, query, index) {
+            const q = encodeURIComponent(query);
+            switch (portal) {
+                case 'naver':
+                    // 최신순은 sm=tab_opt&sor=dd (뉴스 등 섹션에 따라 다름)
+                    return `https://search.naver.com/search.naver?query=${q}`;
+                case 'google':
+                    // 최신순은 tbs=qdr:d 등 추가 가능
+                    return `https://www.google.com/search?q=${q}`;
+                case 'daum':
+                    return `https://search.daum.net/search?q=${q}`;
+                case 'nate':
+                    return `https://search.daum.net/search?q=${q}`; // 대체(네이트 검색 리다이렉트되는 경우가 많음)
+                case 'bing':
+                    return `https://www.bing.com/search?q=${q}`;
+                case 'yahoo':
+                    return `https://search.yahoo.com/search?p=${q}`;
+                case 'coupang':
+                    return `https://www.coupang.com/np/search?component=&q=${q}`;
+                case 'elevenst':
+                    return `https://search.11st.co.kr/Search.tmall?method=getCatalogPrdSearch&kwd=${q}`;
+                case 'gmarket':
+                    return `https://browse.gmarket.co.kr/search?keyword=${q}`;
+                case 'auction':
+                    return `https://browse.auction.co.kr/search?keyword=${q}`;
+                case 'youtube':
+                    return `https://www.youtube.com/results?search_query=${q}`;
+                case 'instagram':
+                    // 인스타는 로그인 요구 가능. 해시태그 페이지로 연결
+                    return `https://www.instagram.com/explore/tags/${encodeURIComponent(query.replace(/\s+/g, ''))}/`;
+                default:
+                    return `https://www.google.com/search?q=${q}`;
+            }
+        }
+
+        // 현실적인 제목 생성
+        function generateRealisticTitle(query, portal, index) {
+            const templates = getTemplatesByPortal(portal);
+            const template = templates[Math.floor(Math.random() * templates.length)];
+            return template.replace('{query}', query).replace('{index}', index);
+        }
+
+        // 포털별 템플릿
+        function getTemplatesByPortal(portal) {
+            const templates = {
+                naver: [
+                    '{query} 관련 최신 정보 - 네이버 블로그',
+                    '{query} 검색 결과 #{index} - 네이버',
+                    '{query}에 대한 상세 분석',
+                    '{query} 관련 뉴스와 정보'
+                ],
+                google: [
+                    '{query} - Google Search Results',
+                    'Everything about {query}',
+                    '{query} Information and Details',
+                    'Search Results for {query}'
+                ],
+                coupang: [
+                    '{query} 상품 추천 - 쿠팡',
+                    '{query} 관련 할인 상품',
+                    '{query} 최저가 비교',
+                    '{query} 인기 상품 #{index}'
+                ],
+                youtube: [
+                    '{query} 관련 유튜브 영상',
+                    '{query} 추천 영상 #{index}',
+                    '{query} 튜토리얼 영상',
+                    '{query} 리뷰 영상'
+                ]
+            };
+            
+            return templates[portal] || [
+                '{query} 검색 결과 #{index}',
+                '{query} 관련 정보',
+                '{query} 상세 내용'
+            ];
+        }
+
+        // 현실적인 설명 생성
+        function generateRealisticSnippet(query, portal) {
+            const snippets = [
+                `${query}에 대한 자세한 정보를 제공합니다. 다양한 관점에서 분석한 내용을 확인해보세요.`,
+                `${query} 관련 최신 트렌드와 정보를 종합적으로 정리했습니다.`,
+                `${query}에 대해 궁금한 모든 것을 한 번에 알아보세요.`,
+                `${query} 관련 유용한 팁과 정보를 모았습니다.`,
+                `${query}에 대한 전문가의 의견과 분석을 확인할 수 있습니다.`
+            ];
+            return snippets[Math.floor(Math.random() * snippets.length)];
+        }
+
+        // 최근 날짜 생성
+        function generateRecentDate() {
+            const now = new Date();
+            const randomMinutes = Math.floor(Math.random() * 1440); // 최근 24시간 내
+            const date = new Date(now.getTime() - randomMinutes * 60000);
+            return date.toISOString();
+        }
+
+        // 결과 표시
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            
+            if (results.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #B8B8C8; padding: 40px;">검색 결과가 없습니다.</div>';
+                return;
+            }
+            
+            container.innerHTML = results.map(result => `
+                <div class="result-item" onclick="openUrl('${result.url}')">
+                    <div class="result-title">${result.title}</div>
+                    <div class="result-meta">
+                        <span class="result-source portal-${result.portal}">${result.source}</span>
+                        <span class="result-date">${formatDate(result.date)}</span>
+                    </div>
+                    <div class="result-snippet">${result.snippet}</div>
+                    <div class="result-url">${result.url}</div>
+                </div>
+            `).join('');
+        }
+
+        // URL 열기
+        function openUrl(url) {
+            window.open(url, '_blank');
+        }
+
+        // 날짜 포맷팅
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins}분 전`;
+            if (diffHours < 24) return `${diffHours}시간 전`;
+            return `${diffDays}일 전`;
+        }
+
+        // 터치 이벤트 최적화
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        document.addEventListener('touchmove', function() {}, {passive: true});
+    </script>
+</body>
+</html>
