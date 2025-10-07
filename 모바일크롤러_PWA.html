@@ -561,6 +561,7 @@
 
         // 크롤링 시뮬레이션
         async function simulateCrawling(query, portal) {
+            // 1) Worker가 설정되어 있으면 실제 링크를 받아옵니다.
             if (WORKER_URL) {
                 try {
                     const url = `${WORKER_URL}/?portal=${encodeURIComponent(portal)}&q=${encodeURIComponent(query)}`;
@@ -582,6 +583,7 @@
                 }
             }
 
+            // 2) Worker가 없거나 실패하면 포털 검색 페이지로 대체 결과 생성
             const results = [];
             const count = Math.floor(Math.random() * 8) + 5; // 5-12개 결과
             for (let i = 1; i <= count; i++) {
@@ -602,13 +604,15 @@
             const q = encodeURIComponent(query);
             switch (portal) {
                 case 'naver':
+                    // 최신순은 sm=tab_opt&sor=dd (뉴스 등 섹션에 따라 다름)
                     return `https://search.naver.com/search.naver?query=${q}`;
                 case 'google':
+                    // 최신순은 tbs=qdr:d 등 추가 가능
                     return `https://www.google.com/search?q=${q}`;
                 case 'daum':
                     return `https://search.daum.net/search?q=${q}`;
                 case 'nate':
-                    return `https://search.daum.net/search?q=${q}`;
+                    return `https://search.daum.net/search?q=${q}`; // 대체(네이트 검색 리다이렉트되는 경우가 많음)
                 case 'bing':
                     return `https://www.bing.com/search?q=${q}`;
                 case 'yahoo':
@@ -624,6 +628,7 @@
                 case 'youtube':
                     return `https://www.youtube.com/results?search_query=${q}`;
                 case 'instagram':
+                    // 인스타는 로그인 요구 가능. 해시태그 페이지로 연결
                     return `https://www.instagram.com/explore/tags/${encodeURIComponent(query.replace(/\s+/g, ''))}/`;
                 default:
                     return `https://www.google.com/search?q=${q}`;
