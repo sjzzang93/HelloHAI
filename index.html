@@ -194,16 +194,19 @@
             margin-top: 20px;
         }
 
-        .result-item {
+        .result-link {
+            display: block;
             background: #2A2A3E;
             border: 1px solid #3A3A4E;
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
             transition: all 0.3s ease;
+            color: inherit;
+            text-decoration: none;
         }
 
-        .result-item:hover {
+        .result-link:hover {
             border-color: #4A5FC1;
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(74, 95, 193, 0.2);
@@ -708,7 +711,7 @@
             }
             
             container.innerHTML = results.map(result => `
-                <div class="result-item" onclick="openUrl('${result.url}')">
+                <a class="result-link" href="${result.url}" target="_blank" rel="noopener noreferrer">
                     <div class="result-title">${result.title}</div>
                     <div class="result-meta">
                         <span class="result-source portal-${result.portal}">${result.source}</span>
@@ -716,14 +719,11 @@
                     </div>
                     <div class="result-snippet">${result.snippet}</div>
                     <div class="result-url">${result.url}</div>
-                </div>
+                </a>
             `).join('');
         }
 
-        // URL 열기
-        function openUrl(url) {
-            window.open(url, '_blank');
-        }
+        // URL 열기는 a[target=_blank]로 처리 (iOS Safari 팝업차단 회피)
 
         // 날짜 포맷팅
         function formatDate(dateString) {
