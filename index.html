@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="웹크롤러프로">
     <meta name="theme-color" content="#4A5FC1">
-    <title>웹 크롤러 프로</title>
+    <title>하이HAI 검색</title>
     <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;웹크롤러프로&quot;,&quot;short_name&quot;:&quot;크롤러&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0F0F1E&quot;,&quot;theme_color&quot;:&quot;#4A5FC1&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiM0QTVGQzEiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTAgMTBIMTRWMTZIMTBWMTBaIi8+CjxwYXRoIGQ9Ik0yIDJMMjIgMiIvPgo8cGF0aCBkPSJNMiA2TDIyIDYiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiPgo8cGF0aCBkPSJNMTAgMTBIMTRWMTZIMTBWMTBaIi8+CjxwYXRoIGQ9Ik0yIDJMMjIgMiIvPgo8cGF0aCBkPSJNMiA2TDIyIDYiLz4KPC9zdmc+&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
     <style>
         * {
@@ -342,7 +342,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🕷️ 웹 크롤러 프로</h1>
+            <h1>하이HAI 검색</h1>
             <p>18개 포털 통합 검색</p>
         </div>
 
@@ -422,7 +422,7 @@
             </div>
 
             <button type="submit" class="search-btn">
-                🔍 크롤링 시작
+                검색하기
             </button>
         </form>
 
@@ -564,7 +564,7 @@
             for (let i = 1; i <= count; i++) {
                 results.push({
                     title: generateRealisticTitle(query, portal, i),
-                    url: `https://example.com/${portal}/result-${i}`,
+                    url: buildResultUrl(portal, query, i),
                     source: getPortalName(portal),
                     portal: portal,
                     snippet: generateRealisticSnippet(query, portal),
@@ -573,6 +573,39 @@
             }
             
             return results;
+        }
+
+        // 실제 포털 검색 URL 생성 (클릭 시 포털로 이동)
+        function buildResultUrl(portal, query, index) {
+            const q = encodeURIComponent(query);
+            switch (portal) {
+                case 'naver':
+                    return `https://search.naver.com/search.naver?query=${q}`;
+                case 'google':
+                    return `https://www.google.com/search?q=${q}`;
+                case 'daum':
+                    return `https://search.daum.net/search?q=${q}`;
+                case 'nate':
+                    return `https://search.daum.net/search?q=${q}`;
+                case 'bing':
+                    return `https://www.bing.com/search?q=${q}`;
+                case 'yahoo':
+                    return `https://search.yahoo.com/search?p=${q}`;
+                case 'coupang':
+                    return `https://www.coupang.com/np/search?component=&q=${q}`;
+                case 'elevenst':
+                    return `https://search.11st.co.kr/Search.tmall?method=getCatalogPrdSearch&kwd=${q}`;
+                case 'gmarket':
+                    return `https://browse.gmarket.co.kr/search?keyword=${q}`;
+                case 'auction':
+                    return `https://browse.auction.co.kr/search?keyword=${q}`;
+                case 'youtube':
+                    return `https://www.youtube.com/results?search_query=${q}`;
+                case 'instagram':
+                    return `https://www.instagram.com/explore/tags/${encodeURIComponent(query.replace(/\s+/g, ''))}/`;
+                default:
+                    return `https://www.google.com/search?q=${q}`;
+            }
         }
 
         // 현실적인 제목 생성
