@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAI 빠른 링크 - 577.kr 스타일</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .link-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .link-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .url-shortcuts {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .url-shortcuts h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .url-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .url-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .url-item:hover {
+            background: #e9ecef;
+        }
+
+        .url-keyword {
+            font-weight: 600;
+            color: #FF6F0F;
+            margin-bottom: 5px;
+        }
+
+        .url-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .url-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">HAI</div>
+            <div class="subtitle">빠른 접속 서비스</div>
+        </div>
+
+        <div class="quick-links">
+            <a href="/index.html?q=맛집&type=title&scope=all" class="link-card">
+                <span class="link-icon">🍽️</span>
+                <div class="link-title">맛집 검색</div>
+                <div class="link-desc">주변 맛집과 리뷰를 찾아보세요</div>
+            </a>
+
+            <a href="/index.html?q=쇼핑&type=content&scope=shopping" class="link-card">
+                <span class="link-icon">🛒</span>
+                <div class="link-title">쇼핑 검색</div>
+                <div class="link-desc">최저가 상품을 찾아보세요</div>
+            </a>
+
+            <a href="/index.html?q=뉴스&type=latest&scope=news" class="link-card">
+                <span class="link-icon">📰</span>
+                <div class="link-title">뉴스 검색</div>
+                <div class="link-desc">최신 뉴스를 확인하세요</div>
+            </a>
+
+            <a href="/index.html?q=블로그&type=comment&scope=blog" class="link-card">
+                <span class="link-icon">📝</span>
+                <div class="link-title">블로그 검색</div>
+                <div class="link-desc">인기 블로그 글을 읽어보세요</div>
+            </a>
+
+            <a href="/index.html?q=여행&type=title&scope=all" class="link-card">
+                <span class="link-icon">✈️</span>
+                <div class="link-title">여행 검색</div>
+                <div class="link-desc">여행 정보와 추천을 찾아보세요</div>
+            </a>
+
+            <a href="/index.html?q=부동산&type=content&scope=all" class="link-card">
+                <span class="link-icon">🏠</span>
+                <div class="link-title">부동산 검색</div>
+                <div class="link-desc">매물 정보를 확인하세요</div>
+            </a>
+
+            <a href="/index.html?q=취업&type=latest&scope=all" class="link-card">
+                <span class="link-icon">💼</span>
+                <div class="link-title">취업 검색</div>
+                <div class="link-desc">채용 정보를 찾아보세요</div>
+            </a>
+
+            <a href="/index.html?q=게임&type=comment&scope=all" class="link-card">
+                <span class="link-icon">🎮</span>
+                <div class="link-title">게임 검색</div>
+                <div class="link-desc">게임 정보와 공략을 찾아보세요</div>
+            </a>
+        </div>
+
+        <div class="url-shortcuts">
+            <h3>🔗 빠른 URL 접속</h3>
+            <div class="url-list">
+                <div class="url-item">
+                    <div class="url-keyword">맛집</div>
+                    <div class="url-desc">맛집 검색</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">쇼핑</div>
+                    <div class="url-desc">쇼핑몰 검색</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">뉴스</div>
+                    <div class="url-desc">최신 뉴스</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">블로그</div>
+                    <div class="url-desc">블로그 글</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">여행</div>
+                    <div class="url-desc">여행 정보</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">부동산</div>
+                    <div class="url-desc">매물 정보</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">취업</div>
+                    <div class="url-desc">채용 정보</div>
+                </div>
+                <div class="url-item">
+                    <div class="url-keyword">게임</div>
+                    <div class="url-desc">게임 공략</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>www.helloHai.kr - 빠르고 정확한 검색 서비스</p>
+            <p>© 2024 HAI Search. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

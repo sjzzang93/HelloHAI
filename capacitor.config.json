@@ -1,0 +1,12 @@
+{
+  "appId": "com.hellohai.search",
+  "appName": "하이HAI검색",
+  "webDir": "www",
+  "server": {
+    "url": "http://localhost:3000",
+    "cleartext": true
+  },
+  "ios": {
+    "contentInset": "automatic"
+  }
+}
